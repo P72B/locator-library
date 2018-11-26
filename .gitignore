@@ -1,1 +1,20 @@
+*.iml
+.gradle
+/local.properties
+
+# IDEA/Android Studio ignores
+*.iml
+*.ipr
+*.iws
+**/.idea/**/*
+!.idea/codeStyles/**/*
+.idea
+/gradle
+gradlew
+gradlew.bat
+
+.DS_Store
 /build
+/captures
+.externalNativeBuil
+app/google-services.json
