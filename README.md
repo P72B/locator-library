@@ -1,2 +1,2 @@
-# LocatorModule
-Android location aware module
+# Locator
+Android location aware module.
