@@ -1,7 +1,6 @@
 package de.p72b.locator.location
 
 import android.app.Activity
-import android.content.Intent
 import android.content.IntentSender
 
 import com.google.android.gms.common.api.ApiException
