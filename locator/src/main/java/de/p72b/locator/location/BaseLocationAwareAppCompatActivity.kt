@@ -1,15 +1,11 @@
 package de.p72b.locator.location
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-
+import android.support.v7.app.AppCompatActivity
 import de.p72b.locator.preferences.LocatorPreferences
 
-@SuppressLint("Registered")
-open class BaseLocationAwareActivity : Activity() {
-
+open class BaseLocationAwareAppCompatActivity : AppCompatActivity() {
     protected lateinit var locationManager: LocationManager
     private lateinit var settingsClientManager: SettingsClientManager
 
