@@ -68,12 +68,13 @@ class LocationManager internal constructor(activity: Activity,
         }
     }
 
-    fun deviceLocationSettingFulfilled(listener: ISettingsClientResultListener) {
+    @JvmOverloads
+    fun deviceLocationSettingFulfilled(listener: ISettingsClientResultListener, shouldRequestSettingsChange: Boolean = false) {
         val locationRequest = LocationRequest()
         locationRequest.interval = 10000
         locationRequest.fastestInterval = 5000
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         settingsClientManager.checkIfDeviceLocationSettingFulfillRequestRequirements(
-                false, locationRequest, listener)
+            shouldRequestSettingsChange, locationRequest, listener)
     }
 }
