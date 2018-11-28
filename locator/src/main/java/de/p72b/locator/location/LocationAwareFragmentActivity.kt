@@ -2,10 +2,10 @@ package de.p72b.locator.location
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.FragmentActivity
 import de.p72b.locator.preferences.LocatorPreferences
 
-open class BaseLocationAwareAppCompatActivity : AppCompatActivity() {
+open class LocationAwareFragmentActivity : FragmentActivity() {
     protected lateinit var locationManager: LocationManager
     private lateinit var settingsClientManager: SettingsClientManager
 

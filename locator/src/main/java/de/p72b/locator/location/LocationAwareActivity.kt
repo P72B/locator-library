@@ -1,11 +1,15 @@
 package de.p72b.locator.location
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
+
 import de.p72b.locator.preferences.LocatorPreferences
 
-open class BaseLocationAwareFragmentActivity : FragmentActivity() {
+@SuppressLint("Registered")
+open class LocationAwareActivity : Activity() {
+
     protected lateinit var locationManager: LocationManager
     private lateinit var settingsClientManager: SettingsClientManager
 
