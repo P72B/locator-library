@@ -14,10 +14,10 @@ internal class PermissionManager(private val activity: Activity) {
         private const val REQUEST_CODE_PERMISSION = 25
     }
 
-    fun hasPermissionIfNotRequest(permission: String): Boolean {
+    fun hasPermissionIfNotRequest(permission: String, listener: IPermissionListener? = null): Boolean {
         val permissionState = getPermissionStatus(permission)
         if (PermissionChecker.PERMISSION_GRANTED != permissionState) {
-            requestPermission(permission, permissionState, REQUEST_CODE_PERMISSION)
+            requestPermission(permission, permissionState, REQUEST_CODE_PERMISSION, listener)
             return false
         }
         return true
@@ -42,12 +42,14 @@ internal class PermissionManager(private val activity: Activity) {
     }
 
     private fun requestPermission(permission: String, permissionState: Int,
-                                  requestCode: Int) {
+                                  requestCode: Int, listener: IPermissionListener?) {
         when (permissionState) {
             PermissionChecker.PERMISSION_DENIED -> ActivityCompat.requestPermissions(activity,
                     arrayOf(permission),
                     requestCode)
-            PermissionChecker.PERMISSION_DENIED_APP_OP -> {}
+            PermissionChecker.PERMISSION_DENIED_APP_OP -> {
+                listener?.onDenied(true)
+            }
             PermissionChecker.PERMISSION_GRANTED -> {}
         }
     }

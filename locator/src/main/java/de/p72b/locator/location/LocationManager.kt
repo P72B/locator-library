@@ -58,7 +58,7 @@ class LocationManager internal constructor(activity: Activity,
             return
         }
         permissionRequestSubscribers.add(listener)
-        permissionManager.hasPermissionIfNotRequest(Manifest.permission.ACCESS_FINE_LOCATION)
+        permissionManager.hasPermissionIfNotRequest(Manifest.permission.ACCESS_FINE_LOCATION, listener)
     }
 
     private fun notifyPermissionListener(isGranted: Boolean) {
@@ -69,7 +69,7 @@ class LocationManager internal constructor(activity: Activity,
             if (isGranted) {
                 listener.onGranted()
             } else {
-                listener.onDenied()
+                listener.onDenied(false)
             }
         }
         permissionRequestSubscribers.clear()
