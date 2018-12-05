@@ -13,6 +13,7 @@ class LocationManager internal constructor(activity: Activity,
 
     private val fusedLocationSource: GooglePlayServicesLocationSource
     private val subscribers = CopyOnWriteArrayList<ILocationUpdatesListener>()
+    private val permissionRequestSubscribers = CopyOnWriteArrayList<IPermissionListener>()
     private val permissionManager: PermissionManager = PermissionManager(activity)
 
     init {
@@ -51,6 +52,29 @@ class LocationManager internal constructor(activity: Activity,
         return permissionManager.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
+    fun checkLocationPermission(listener: IPermissionListener) {
+        if (permissionManager.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            listener.onGranted()
+            return
+        }
+        permissionRequestSubscribers.add(listener)
+        permissionManager.hasPermissionIfNotRequest(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    private fun notifyPermissionListener(isGranted: Boolean) {
+        if (subscribers.isEmpty()) {
+            return
+        }
+        for (listener in permissionRequestSubscribers) {
+            if (isGranted) {
+                listener.onGranted()
+            } else {
+                listener.onDenied()
+            }
+        }
+        permissionRequestSubscribers.clear()
+    }
+
     internal fun notifyPermissionRequestResults(permissions: Array<String>, grantResults: IntArray) {
         for ((index, permission) in permissions.withIndex()) {
             when (permission) {
@@ -63,6 +87,7 @@ class LocationManager internal constructor(activity: Activity,
                     } else if (Activity.RESULT_CANCELED == grantResult) {
                         fusedLocationSource.stopReceivingLocationUpdates()
                     }
+                    notifyPermissionListener(Activity.RESULT_OK == grantResult)
                 }
             }
         }
