@@ -2,6 +2,7 @@ package de.p72b.locator.location
 
 import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.location.Location
 
 import com.google.android.gms.location.LocationRequest
@@ -62,7 +63,7 @@ class LocationManager internal constructor(activity: Activity,
     }
 
     private fun notifyPermissionListener(isGranted: Boolean) {
-        if (subscribers.isEmpty()) {
+        if (permissionRequestSubscribers.isEmpty()) {
             return
         }
         for (listener in permissionRequestSubscribers) {
@@ -82,12 +83,12 @@ class LocationManager internal constructor(activity: Activity,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION -> {
                     val grantResult = grantResults[index]
-                    if (Activity.RESULT_OK == grantResult) {
+                    if (PackageManager.PERMISSION_GRANTED == grantResult) {
                         fusedLocationSource.startReceivingLocationUpdates()
-                    } else if (Activity.RESULT_CANCELED == grantResult) {
+                    } else if (PackageManager.PERMISSION_DENIED == grantResult) {
                         fusedLocationSource.stopReceivingLocationUpdates()
                     }
-                    notifyPermissionListener(Activity.RESULT_OK == grantResult)
+                    notifyPermissionListener(PackageManager.PERMISSION_GRANTED == grantResult)
                 }
             }
         }

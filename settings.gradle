@@ -1,1 +1,1 @@
-include ':locator'
+include ':locator', ':demo'
