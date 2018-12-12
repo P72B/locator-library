@@ -9,7 +9,6 @@ import de.p72b.locator.preferences.LocatorPreferences
 
 @SuppressLint("Registered")
 open class LocationAwareActivity : Activity() {
-
     protected lateinit var locationManager: LocationManager
     private lateinit var settingsClientManager: SettingsClientManager
 

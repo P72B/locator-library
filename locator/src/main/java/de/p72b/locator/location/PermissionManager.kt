@@ -7,12 +7,15 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.content.PermissionChecker
 
 import de.p72b.locator.preferences.LocatorPreferences
+import java.util.concurrent.CopyOnWriteArrayList
 
 internal class PermissionManager(private val activity: Activity) {
 
     companion object {
         private const val REQUEST_CODE_PERMISSION = 25
     }
+
+    private val permissionRequestSubscribers = CopyOnWriteArrayList<IPermissionListener>()
 
     fun hasPermissionIfNotRequest(permission: String, listener: IPermissionListener? = null): Boolean {
         val permissionState = getPermissionStatus(permission)
@@ -27,7 +30,21 @@ internal class PermissionManager(private val activity: Activity) {
         return PermissionChecker.PERMISSION_GRANTED == getPermissionStatus(permission)
     }
 
-    private fun getPermissionStatus(manifestPermissionName: String): Int {
+    fun notifyPermissionListener(isGranted: Boolean) {
+        if (permissionRequestSubscribers.isEmpty()) {
+            return
+        }
+        for (listener in permissionRequestSubscribers) {
+            if (isGranted) {
+                listener.onGranted()
+            } else {
+                listener.onDenied(false)
+            }
+        }
+        permissionRequestSubscribers.clear()
+    }
+
+    fun getPermissionStatus(manifestPermissionName: String): Int {
         if (ContextCompat.checkSelfPermission(activity, manifestPermissionName) == PackageManager.PERMISSION_GRANTED) {
             return PermissionChecker.PERMISSION_GRANTED
         }
@@ -44,13 +61,18 @@ internal class PermissionManager(private val activity: Activity) {
     private fun requestPermission(permission: String, permissionState: Int,
                                   requestCode: Int, listener: IPermissionListener?) {
         when (permissionState) {
-            PermissionChecker.PERMISSION_DENIED -> ActivityCompat.requestPermissions(activity,
+            PermissionChecker.PERMISSION_DENIED -> {
+                permissionRequestSubscribers.add(listener)
+                ActivityCompat.requestPermissions(activity,
                     arrayOf(permission),
                     requestCode)
+            }
             PermissionChecker.PERMISSION_DENIED_APP_OP -> {
                 listener?.onDenied(true)
             }
-            PermissionChecker.PERMISSION_GRANTED -> {}
+            PermissionChecker.PERMISSION_GRANTED -> {
+                listener?.onGranted()
+            }
         }
     }
 

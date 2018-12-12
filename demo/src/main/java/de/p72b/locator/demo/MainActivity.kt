@@ -7,13 +7,16 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import de.p72b.locator.location.LocationAwareAppCompatActivity
-
+import java.util.*
+import java.text.SimpleDateFormat
 
 
 class MainActivity : LocationAwareAppCompatActivity(), View.OnClickListener {
 
     private lateinit var locationTextView: TextView
+    private lateinit var locationTextViewTstamp: TextView
     private lateinit var mainPresenter: MainPresenter
+    private val sdf = SimpleDateFormat("HH:mm:ss.SSS", Locale.GERMANY)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +27,10 @@ class MainActivity : LocationAwareAppCompatActivity(), View.OnClickListener {
     }
 
     private fun initViews() {
-        findViewById<Button>(R.id.vButton).setOnClickListener(this)
-        locationTextView = findViewById(R.id.vTextView)
+        findViewById<Button>(R.id.vButtonLoud).setOnClickListener(this)
+        findViewById<Button>(R.id.vButtonSilent).setOnClickListener(this)
+        locationTextView = findViewById(R.id.vTextViewLocation)
+        locationTextViewTstamp = findViewById(R.id.vTextViewTstamp)
     }
 
     override fun onClick(view: View?) {
@@ -35,6 +40,8 @@ class MainActivity : LocationAwareAppCompatActivity(), View.OnClickListener {
     fun updateLocation(location: Location) {
         val displayedText = "${location.latitude} / ${location.longitude}"
         locationTextView.text = displayedText
+
+        locationTextViewTstamp.text = sdf.format(Calendar.getInstance().time)
     }
 
     fun showSnackbar(message: String?) {

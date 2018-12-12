@@ -9,8 +9,20 @@ import com.google.android.gms.location.LocationRequest
 
 import java.util.concurrent.CopyOnWriteArrayList
 
-class LocationManager internal constructor(activity: Activity,
-                                           private val settingsClientManager: SettingsClientManager) : ILocationUpdatesListener {
+class LocationManager internal constructor(
+    activity: Activity,
+    private val settingsClientManager: SettingsClientManager
+) : ILocationUpdatesListener {
+
+    companion object {
+        const val CANCELED_SETTINGS_CHANGE = 0
+        const val MISSING_PERMISSION = 1
+        const val MISSING_PERMISSION_DO_NOT_ASK_AGAIN = 2
+        const val SETTINGS_NOT_FULFILLED = 3
+        const val FUSED_LOCATION_ERROR = 4
+        const val LOCATION_UPDATES_RETRY_LIMIT = 5
+        const val CANCELED_PERMISSION_CHANGE = 6
+    }
 
     private val fusedLocationSource: GooglePlayServicesLocationSource
     private val subscribers = CopyOnWriteArrayList<ILocationUpdatesListener>()
@@ -18,8 +30,10 @@ class LocationManager internal constructor(activity: Activity,
     private val permissionManager: PermissionManager = PermissionManager(activity)
 
     init {
-        fusedLocationSource = GooglePlayServicesLocationSource(activity, permissionManager,
-                settingsClientManager, this)
+        fusedLocationSource = GooglePlayServicesLocationSource(
+            activity, permissionManager,
+            settingsClientManager, this
+        )
     }
 
     override fun onLocationChanged(location: Location) {
@@ -31,8 +45,10 @@ class LocationManager internal constructor(activity: Activity,
         }
     }
 
-    fun getLastLocation(listener: ILastLocationListener) {
-        fusedLocationSource.getLastLocation(listener)
+    @JvmOverloads
+    fun getLastLocation(listener: ILastLocationListener, shouldRequestLocationPermission: Boolean = true,
+                        shouldRequestSettingsChange: Boolean = true) {
+        fusedLocationSource.getLastLocation(listener, shouldRequestLocationPermission, shouldRequestSettingsChange)
     }
 
     fun subscribeToLocationChanges(listener: ILocationUpdatesListener) {
@@ -63,6 +79,7 @@ class LocationManager internal constructor(activity: Activity,
     }
 
     private fun notifyPermissionListener(isGranted: Boolean) {
+        permissionManager.notifyPermissionListener(isGranted)
         if (permissionRequestSubscribers.isEmpty()) {
             return
         }
@@ -95,12 +112,14 @@ class LocationManager internal constructor(activity: Activity,
     }
 
     @JvmOverloads
-    fun deviceLocationSettingFulfilled(listener: ISettingsClientResultListener, shouldRequestSettingsChange: Boolean = false) {
+    fun deviceLocationSettingFulfilled(listener: ISettingsClientResultListener,
+                                       shouldRequestSettingsChange: Boolean = false) {
         val locationRequest = LocationRequest()
         locationRequest.interval = 10000
         locationRequest.fastestInterval = 5000
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         settingsClientManager.checkIfDeviceLocationSettingFulfillRequestRequirements(
-            shouldRequestSettingsChange, locationRequest, listener)
+            shouldRequestSettingsChange, locationRequest, listener
+        )
     }
 }
