@@ -9,13 +9,21 @@
         tools:context=".MainActivity">
 
     <TextView
+            android:hint="Last known location:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"/>
+
+    <TextView
             android:hint="lat / lng"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/vTextViewLocation"
             android:gravity="center"
+            android:layout_marginTop="6dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"/>
 
     <TextView
@@ -28,18 +36,40 @@
             android:layout_marginTop="6dp"
             android:layout_marginEnd="8dp"/>
 
+    <TextView
+            android:hint="Create single location request:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"/>
+
     <Button
             android:text="Loud"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/vButtonLoud"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginStart="8dp"/>
 
     <Button
             android:text="Silent"
             android:layout_height="wrap_content"
             android:id="@+id/vButtonSilent"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="8dp"/>
+
+    <TextView
+            android:hint="Listen to location change updates:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"/>
+
+    <Button
+            android:text="updates"
+            android:layout_height="wrap_content"
+            android:id="@+id/vButtonLocationUpdates"
             android:layout_width="wrap_content"
             android:layout_marginStart="8dp"/>
 

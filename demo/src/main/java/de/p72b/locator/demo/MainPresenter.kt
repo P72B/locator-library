@@ -3,6 +3,7 @@ package de.p72b.locator.demo
 import android.location.Location
 import android.view.View
 import de.p72b.locator.location.ILastLocationListener
+import de.p72b.locator.location.ILocationUpdatesListener
 import de.p72b.locator.location.LocationManager
 
 class MainPresenter(
@@ -10,10 +11,28 @@ class MainPresenter(
     private val mainActivity: MainActivity
 ) {
 
+    private var isListeningForLocationUpdates = false
+    private val locationUpdatesListener = object : ILocationUpdatesListener {
+        override fun onLocationChanged(location: Location) {
+            mainActivity.updateLocation(location)
+        }
+
+        override fun onLocationChangedError(code: Int, message: String?) {
+            isListeningForLocationUpdates = false
+            mainActivity.setLocationUpdatesState(isListeningForLocationUpdates)
+            mainActivity.showSnackbar("($code) $message ")
+        }
+    }
+
+    init {
+        mainActivity.setLocationUpdatesState(isListeningForLocationUpdates)
+    }
+
     fun onClick(view: View?) {
         when (view?.id) {
             R.id.vButtonLoud -> locateMePressed()
             R.id.vButtonSilent -> locateMePressed(false, false)
+            R.id.vButtonLocationUpdates -> locationUpdatesPressed()
         }
     }
 
@@ -31,5 +50,16 @@ class MainPresenter(
                 mainActivity.showSnackbar("($code) $message ")
             }
         }, shouldRequestPermission, shouldRequestSettingsChange)
+    }
+
+    private fun locationUpdatesPressed() {
+        if (isListeningForLocationUpdates) {
+            isListeningForLocationUpdates = false
+            locationManager.unSubscribeToLocationChanges(locationUpdatesListener)
+        } else {
+            isListeningForLocationUpdates = true
+            locationManager.subscribeToLocationChanges(locationUpdatesListener)
+        }
+        mainActivity.setLocationUpdatesState(isListeningForLocationUpdates)
     }
 }

@@ -76,23 +76,29 @@ internal class GooglePlayServicesLocationSource(
             })
     }
 
-    fun startReceivingLocationUpdates() {
-        if (!permissionManager.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-            || locationUpdatesListener == null) {
-            return
-        }
-
-        settingsClientManager.checkIfDeviceLocationSettingFulfillRequestRequirements(
-            false, locationRequest, object : ISettingsClientResultListener {
-                @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission")
+    private fun checkSettings(listener: ILocationUpdatesListener, shouldRequestSettingsChange: Boolean) {
+        settingsClientManager.checkIfDeviceLocationSettingFulfillRequestRequirements(shouldRequestSettingsChange,
+            locationRequest, object : ISettingsClientResultListener {
                 override fun onSuccess() {
                     fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
                 }
 
                 override fun onFailure(code: Int, message: String) {
-                    // it makes no sense to start location updates without proper settings.
+                    listener.onLocationChangedError(code, message)
                 }
             })
+    }
+
+    fun startReceivingLocationUpdates() {
+        if (locationUpdatesListener == null) {
+            return
+        }
+        when (permissionManager.getPermissionStatus(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            PermissionChecker.PERMISSION_DENIED -> locationUpdatesListener.onLocationChangedError(LocationManager.MISSING_PERMISSION, "Location permission missing")
+            PermissionChecker.PERMISSION_DENIED_APP_OP -> locationUpdatesListener.onLocationChangedError(LocationManager.MISSING_PERMISSION_DO_NOT_ASK_AGAIN, "Location permission missing, never ask me again")
+            PermissionChecker.PERMISSION_GRANTED -> checkSettings(locationUpdatesListener, false)
+        }
     }
 
     fun stopReceivingLocationUpdates() {

@@ -15,6 +15,7 @@ class MainActivity : LocationAwareAppCompatActivity(), View.OnClickListener {
 
     private lateinit var locationTextView: TextView
     private lateinit var locationTextViewTstamp: TextView
+    private lateinit var buttonLocationUpdates: Button
     private lateinit var mainPresenter: MainPresenter
     private val sdf = SimpleDateFormat("HH:mm:ss.SSS", Locale.GERMANY)
 
@@ -29,6 +30,8 @@ class MainActivity : LocationAwareAppCompatActivity(), View.OnClickListener {
     private fun initViews() {
         findViewById<Button>(R.id.vButtonLoud).setOnClickListener(this)
         findViewById<Button>(R.id.vButtonSilent).setOnClickListener(this)
+        buttonLocationUpdates = findViewById(R.id.vButtonLocationUpdates)
+        buttonLocationUpdates.setOnClickListener(this)
         locationTextView = findViewById(R.id.vTextViewLocation)
         locationTextViewTstamp = findViewById(R.id.vTextViewTstamp)
     }
@@ -50,5 +53,10 @@ class MainActivity : LocationAwareAppCompatActivity(), View.OnClickListener {
         }
         val mySnackbar = Snackbar.make(findViewById(R.id.vMainRoot), message, Snackbar.LENGTH_SHORT)
         mySnackbar.show()
+    }
+
+    fun setLocationUpdatesState(isListening: Boolean) {
+        val title = if (isListening) "stop" else "start"
+        buttonLocationUpdates.text = title
     }
 }

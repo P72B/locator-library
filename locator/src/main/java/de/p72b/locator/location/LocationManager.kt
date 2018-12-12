@@ -45,6 +45,16 @@ class LocationManager internal constructor(
         }
     }
 
+    override fun onLocationChangedError(code: Int, message: String?) {
+        if (subscribers.isEmpty()) {
+            return
+        }
+        for (listener in subscribers) {
+            listener.onLocationChangedError(code, message)
+        }
+        subscribers.clear()
+    }
+
     @JvmOverloads
     fun getLastLocation(listener: ILastLocationListener, shouldRequestLocationPermission: Boolean = true,
                         shouldRequestSettingsChange: Boolean = true) {
@@ -52,10 +62,10 @@ class LocationManager internal constructor(
     }
 
     fun subscribeToLocationChanges(listener: ILocationUpdatesListener) {
-        if (subscribers.isEmpty()) {
+        subscribers.add(listener)
+        if (subscribers.size == 1) {
             fusedLocationSource.startReceivingLocationUpdates()
         }
-        subscribers.add(listener)
     }
 
     fun unSubscribeToLocationChanges(listener: ILocationUpdatesListener) {
