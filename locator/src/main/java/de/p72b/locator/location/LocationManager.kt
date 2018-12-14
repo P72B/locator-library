@@ -75,6 +75,10 @@ class LocationManager internal constructor(
         }
     }
 
+    fun setLocationRequest(locationRequest: LocationRequest) {
+        fusedLocationSource.restartLocationUpdates(locationRequest)
+    }
+
     fun hasLocationPermission(): Boolean {
         return permissionManager.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     }

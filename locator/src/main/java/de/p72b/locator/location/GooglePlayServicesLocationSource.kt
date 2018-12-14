@@ -129,6 +129,12 @@ internal class GooglePlayServicesLocationSource(
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 
+    fun restartLocationUpdates(locationRequest: LocationRequest) {
+        this.locationRequest = locationRequest
+        stopReceivingLocationUpdates()
+        startReceivingLocationUpdates()
+    }
+
     private inner class RetryLocationCallback(private val listener: ILastLocationListener) : LocationCallback() {
         private var retry = 0
 
