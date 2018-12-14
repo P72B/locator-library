@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"/>
 
     <TextView
@@ -26,12 +26,31 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"/>
 
+    <ImageView
+            android:id="@+id/vLocationIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="6dp"
+            android:visibility="invisible"
+            tools:visibility="visible"
+            android:src="@drawable/ic_settings_input_antenna_black_24dp"/>
+
     <TextView
             android:hint="updated at"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/vTextViewTstamp"
-            android:gravity="center"
+            android:gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="8dp"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/vTextViewPreviousUpdate"
+            android:gravity="center_horizontal"
             android:layout_marginStart="8dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="8dp"/>
@@ -72,5 +91,32 @@
             android:id="@+id/vButtonLocationUpdates"
             android:layout_width="wrap_content"
             android:layout_marginStart="8dp"/>
+
+    <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/vButtonLocationRequestDefault">
+
+        <RadioButton
+                android:text="Default"
+                android:layout_height="wrap_content"
+                android:id="@+id/vButtonLocationRequestDefault"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="8dp"/>
+
+        <RadioButton
+                android:text="High"
+                android:layout_height="wrap_content"
+                android:id="@+id/vButtonLocationRequestHigh"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="8dp"/>
+
+        <RadioButton
+                android:text="Low"
+                android:layout_height="wrap_content"
+                android:id="@+id/vButtonLocationRequestLow"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="8dp"/>
+    </RadioGroup>
 
 </LinearLayout>

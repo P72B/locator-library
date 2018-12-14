@@ -15,7 +15,7 @@ internal class GooglePlayServicesLocationSource(
 
     val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(activity)
-    private var locationRequest: LocationRequest = LocationRequest()
+    var locationRequest: LocationRequest = LocationRequest()
     private val locationCallback: LocationCallback
 
     init {
@@ -127,6 +127,11 @@ internal class GooglePlayServicesLocationSource(
         locationRequest.interval = 10000
         locationRequest.fastestInterval = 5000
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+    }
+
+    fun restartLocationUpdates() {
+        stopReceivingLocationUpdates()
+        startReceivingLocationUpdates()
     }
 
     private inner class RetryLocationCallback(private val listener: ILastLocationListener) : LocationCallback() {
