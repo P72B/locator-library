@@ -12,21 +12,28 @@ class MainPresenter(
     private val mainActivity: MainActivity
 ) {
 
-    private var isListeningForLocationUpdates = false
+    private var listeningForLocationUpdatesState = ListeningState.STOPPED
     private val locationUpdatesListener = object : ILocationUpdatesListener {
         override fun onLocationChanged(location: Location) {
+            if (listeningForLocationUpdatesState == ListeningState.PAUSED) {
+                listeningForLocationUpdatesState = ListeningState.RUNNING
+                mainActivity.setLocationUpdatesState(listeningForLocationUpdatesState.action)
+            }
             mainActivity.updateLocation(location)
         }
 
         override fun onLocationChangedError(code: Int, message: String?) {
-            isListeningForLocationUpdates = false
-            mainActivity.setLocationUpdatesState(isListeningForLocationUpdates)
             mainActivity.showSnackbar("($code) $message ")
+            listeningForLocationUpdatesState = ListeningState.STOPPED
+            if (LocationManager.ERROR_PROVIDERS_DISABLED == code) {
+                listeningForLocationUpdatesState = ListeningState.PAUSED
+            }
+            mainActivity.setLocationUpdatesState(listeningForLocationUpdatesState.action)
         }
     }
 
     init {
-        mainActivity.setLocationUpdatesState(isListeningForLocationUpdates)
+        mainActivity.setLocationUpdatesState(listeningForLocationUpdatesState.action)
     }
 
     fun onClick(view: View?) {
@@ -41,13 +48,13 @@ class MainPresenter(
     }
 
     fun onResume() {
-        if (isListeningForLocationUpdates) {
+        if (listeningForLocationUpdatesState != ListeningState.STOPPED) {
             locationManager.subscribeToLocationChanges(locationUpdatesListener)
         }
     }
 
-    fun onStop() {
-        if (isListeningForLocationUpdates) {
+    fun onPause() {
+        if (listeningForLocationUpdatesState != ListeningState.STOPPED) {
             locationManager.unSubscribeToLocationChanges(locationUpdatesListener)
         }
     }
@@ -77,13 +84,23 @@ class MainPresenter(
     }
 
     private fun locationUpdatesPressed() {
-        if (isListeningForLocationUpdates) {
-            isListeningForLocationUpdates = false
-            locationManager.unSubscribeToLocationChanges(locationUpdatesListener)
-        } else {
-            isListeningForLocationUpdates = true
-            locationManager.subscribeToLocationChanges(locationUpdatesListener)
+        when (listeningForLocationUpdatesState) {
+            ListeningState.STOPPED -> {
+                listeningForLocationUpdatesState = ListeningState.RUNNING
+                locationManager.subscribeToLocationChanges(locationUpdatesListener)
+            }
+            ListeningState.PAUSED,
+            ListeningState.RUNNING -> {
+                listeningForLocationUpdatesState = ListeningState.STOPPED
+                locationManager.unSubscribeToLocationChanges(locationUpdatesListener)
+            }
         }
-        mainActivity.setLocationUpdatesState(isListeningForLocationUpdates)
+        mainActivity.setLocationUpdatesState(listeningForLocationUpdatesState.action)
     }
+}
+
+enum class ListeningState(val action: String) {
+    STOPPED("Start"),
+    PAUSED("Stop paused listener"),
+    RUNNING("Stop")
 }

@@ -15,13 +15,14 @@ class LocationManager internal constructor(
 ) : ILocationUpdatesListener {
 
     companion object {
-        const val CANCELED_SETTINGS_CHANGE = 0
-        const val MISSING_PERMISSION = 1
-        const val MISSING_PERMISSION_DO_NOT_ASK_AGAIN = 2
-        const val SETTINGS_NOT_FULFILLED = 3
-        const val FUSED_LOCATION_ERROR = 4
-        const val LOCATION_UPDATES_RETRY_LIMIT = 5
-        const val CANCELED_PERMISSION_CHANGE = 6
+        const val ERROR_CANCELED_SETTINGS_CHANGE = 0
+        const val ERROR_MISSING_PERMISSION = 1
+        const val ERROR_MISSING_PERMISSION_DO_NOT_ASK_AGAIN = 2
+        const val ERROR_SETTINGS_NOT_FULFILLED = 3
+        const val ERROR_FUSED_LOCATION_ERROR = 4
+        const val ERROR_LOCATION_UPDATES_RETRY_LIMIT = 5
+        const val ERROR_CANCELED_PERMISSION_CHANGE = 6
+        const val ERROR_PROVIDERS_DISABLED = 7
     }
 
     private val fusedLocationSource: GooglePlayServicesLocationSource
@@ -52,7 +53,6 @@ class LocationManager internal constructor(
         for (listener in subscribers) {
             listener.onLocationChangedError(code, message)
         }
-        subscribers.clear()
     }
 
     @JvmOverloads
@@ -138,5 +138,23 @@ class LocationManager internal constructor(
         settingsClientManager.checkIfDeviceLocationSettingFulfillRequestRequirements(
             shouldRequestSettingsChange, locationRequest, listener
         )
+    }
+
+    fun onProviderStateChanged(isLocationProviderAvailable: Boolean) {
+        if (!isLocationProviderAvailable) {
+            onLocationChangedError(LocationManager.ERROR_PROVIDERS_DISABLED, "Location provider set to disabled.")
+        } else {
+            fusedLocationSource.getLastLocation(object : ILastLocationListener {
+                override fun onSuccess(location: Location?) {
+                    if (location != null) {
+                        onLocationChanged(location)
+                    }
+                }
+
+                override fun onError(code: Int, message: String?) {
+                    onLocationChangedError(code, message)
+                }
+            }, false, false)
+        }
     }
 }

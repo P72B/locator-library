@@ -38,9 +38,9 @@ class MainActivity : LocationAwareAppCompatActivity(), View.OnClickListener {
         mainPresenter.onResume()
     }
 
-    override fun onStop() {
-        mainPresenter.onStop()
-        super.onStop()
+    override fun onPause() {
+        mainPresenter.onPause()
+        super.onPause()
     }
 
     private fun initViews() {
@@ -88,8 +88,7 @@ class MainActivity : LocationAwareAppCompatActivity(), View.OnClickListener {
         mySnackbar.show()
     }
 
-    fun setLocationUpdatesState(isListening: Boolean) {
-        val title = if (isListening) "stop" else "start"
+    fun setLocationUpdatesState(title: String) {
         buttonLocationUpdates.text = title
     }
 

@@ -31,12 +31,12 @@ internal class SettingsClientManager(private val activity: Activity) {
         task.addOnFailureListener(activity, OnFailureListener { e ->
             val statusCode = (e as ApiException).statusCode
             if (statusCode != LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
-                listener.onFailure(LocationSettingsStatusCodes.RESOLUTION_REQUIRED, "Settings resolution is not fulfilled")
+                listener.onFailure(LocationSettingsStatusCodes.RESOLUTION_REQUIRED, "Settings resolution is not fulfilled.")
                 return@OnFailureListener
             }
 
             if (!shouldRequestSettingsChange) {
-                listener.onFailure(LocationManager.SETTINGS_NOT_FULFILLED, "Location settings aren't met")
+                listener.onFailure(LocationManager.ERROR_SETTINGS_NOT_FULFILLED, "Location settings aren't met.")
                 return@OnFailureListener
             }
 
@@ -47,7 +47,7 @@ internal class SettingsClientManager(private val activity: Activity) {
                 val resolvable = e as ResolvableApiException
                 resolvable.startResolutionForResult(activity, REQUEST_CODE_SETTINGS)
             } catch (sendEx: IntentSender.SendIntentException) {
-                listener.onFailure(LocationManager.SETTINGS_NOT_FULFILLED, "Send Intent to change location settings failed")
+                listener.onFailure(LocationManager.ERROR_SETTINGS_NOT_FULFILLED, "Send Intent to change location settings failed.")
             }
         })
         task.addOnSuccessListener(activity) { listener.onSuccess() }
@@ -65,7 +65,7 @@ internal class SettingsClientManager(private val activity: Activity) {
             if (isSucceeded) {
                 listener.onSuccess()
             } else {
-                listener.onFailure(LocationManager.CANCELED_SETTINGS_CHANGE, "Settings change request canceled by user")
+                listener.onFailure(LocationManager.ERROR_CANCELED_SETTINGS_CHANGE, "Settings change request canceled by user.")
             }
         }
         pendingListenerList.clear()

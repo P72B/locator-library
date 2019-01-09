@@ -41,8 +41,8 @@ internal class GooglePlayServicesLocationSource(
 
         if (!shouldRequestLocationPermission) {
             when (permissionManager.getPermissionStatus(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                PermissionChecker.PERMISSION_DENIED -> listener.onError(LocationManager.MISSING_PERMISSION, "Location permission missing")
-                PermissionChecker.PERMISSION_DENIED_APP_OP -> listener.onError(LocationManager.MISSING_PERMISSION_DO_NOT_ASK_AGAIN, "Location permission missing, never ask me again")
+                PermissionChecker.PERMISSION_DENIED -> listener.onError(LocationManager.ERROR_MISSING_PERMISSION, "Location permission missing")
+                PermissionChecker.PERMISSION_DENIED_APP_OP -> listener.onError(LocationManager.ERROR_MISSING_PERMISSION_DO_NOT_ASK_AGAIN, "Location permission missing, never ask me again")
                 PermissionChecker.PERMISSION_GRANTED -> checkSettings(listener, shouldRequestSettingsChange)
             }
             return
@@ -51,9 +51,9 @@ internal class GooglePlayServicesLocationSource(
         permissionManager.hasPermissionIfNotRequest(Manifest.permission.ACCESS_FINE_LOCATION, object : IPermissionListener {
             override fun onDenied(donNotAskAgain: Boolean) {
                 if (donNotAskAgain) {
-                    listener.onError(LocationManager.MISSING_PERMISSION_DO_NOT_ASK_AGAIN, "Location permission missing, never ask me again")
+                    listener.onError(LocationManager.ERROR_MISSING_PERMISSION_DO_NOT_ASK_AGAIN, "Location permission missing, never ask me again.")
                 } else {
-                    listener.onError(LocationManager.CANCELED_PERMISSION_CHANGE, "Permission change request canceled by user.")
+                    listener.onError(LocationManager.ERROR_CANCELED_PERMISSION_CHANGE, "Permission change request canceled by user.")
                 }
             }
 
@@ -95,8 +95,8 @@ internal class GooglePlayServicesLocationSource(
             return
         }
         when (permissionManager.getPermissionStatus(Manifest.permission.ACCESS_FINE_LOCATION)) {
-            PermissionChecker.PERMISSION_DENIED -> locationUpdatesListener.onLocationChangedError(LocationManager.MISSING_PERMISSION, "Location permission missing")
-            PermissionChecker.PERMISSION_DENIED_APP_OP -> locationUpdatesListener.onLocationChangedError(LocationManager.MISSING_PERMISSION_DO_NOT_ASK_AGAIN, "Location permission missing, never ask me again")
+            PermissionChecker.PERMISSION_DENIED -> locationUpdatesListener.onLocationChangedError(LocationManager.ERROR_MISSING_PERMISSION, "Location permission missing.")
+            PermissionChecker.PERMISSION_DENIED_APP_OP -> locationUpdatesListener.onLocationChangedError(LocationManager.ERROR_MISSING_PERMISSION_DO_NOT_ASK_AGAIN, "Location permission missing, never ask me again.")
             PermissionChecker.PERMISSION_GRANTED -> checkSettings(locationUpdatesListener, false)
         }
     }
@@ -117,7 +117,7 @@ internal class GooglePlayServicesLocationSource(
         }
         getLastLocationTask.addOnFailureListener { e ->
             listener.onError(
-                LocationManager.FUSED_LOCATION_ERROR,
+                LocationManager.ERROR_FUSED_LOCATION_ERROR,
                 e.message
             )
         }
@@ -139,7 +139,7 @@ internal class GooglePlayServicesLocationSource(
 
         override fun onLocationResult(locationResult: LocationResult?) {
             if (retry >= 5) {
-                listener.onError(LocationManager.LOCATION_UPDATES_RETRY_LIMIT, "Location updates retry limit reached. No location found.")
+                listener.onError(LocationManager.ERROR_LOCATION_UPDATES_RETRY_LIMIT, "Location updates retry limit reached. No location found.")
                 fusedLocationClient.removeLocationUpdates(this)
                 return
             }
