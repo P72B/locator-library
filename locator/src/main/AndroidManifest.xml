@@ -3,7 +3,7 @@
     <application>
         <provider
             android:name=".util.ContextProvider"
-            android:authorities="${applicationId}.locator.util.contextprovider"
+            android:authorities="${applicationId}.util.contextprovider"
             android:exported="false" />
     </application>
 </manifest>
