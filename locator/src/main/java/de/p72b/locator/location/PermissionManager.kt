@@ -9,7 +9,7 @@ import android.support.v4.content.PermissionChecker
 import de.p72b.locator.preferences.LocatorPreferences
 import java.util.concurrent.CopyOnWriteArrayList
 
-internal class PermissionManager(private val activity: Activity) {
+class PermissionManager(private val activity: Activity) {
 
     companion object {
         private const val REQUEST_CODE_PERMISSION = 25

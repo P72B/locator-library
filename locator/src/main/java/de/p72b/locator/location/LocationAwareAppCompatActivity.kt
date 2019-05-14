@@ -36,8 +36,8 @@ open class LocationAwareAppCompatActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>,
-                                            grantResults: IntArray) {
+                                             permissions: Array<String>,
+                                             grantResults: IntArray) {
         for (permission in permissions) {
             LocatorPreferences.writeToPreferences(permission, true)
         }
