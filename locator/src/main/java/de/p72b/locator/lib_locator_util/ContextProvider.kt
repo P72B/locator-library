@@ -1,4 +1,4 @@
-package de.p72b.locator.util
+package de.p72b.locator.lib_locator_util
 
 import android.content.ContentProvider
 import android.content.ContentValues
