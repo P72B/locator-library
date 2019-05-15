@@ -1,4 +1,4 @@
-package de.p72b.locator.lib_locator_util
+package de.p72b.locator.util
 
 import android.content.ContentProvider
 import android.content.ContentValues
@@ -7,14 +7,14 @@ import android.net.Uri
 import android.util.Log
 import de.p72b.locator.Locator
 
-class ContextProvider : ContentProvider() {
+class LibLocatorContextProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
         val context = context
         if (context != null) {
            Locator.setContext(context)
         } else {
-            Log.e(TAG, "Context injection to common failed. Context is null! Check ContextProvider registration in the Manifest!")
+            Log.e(TAG, "Context injection to common failed. Context is null! Check LibLocatorContextProvider registration in the Manifest!")
         }
         return false
     }
@@ -40,6 +40,6 @@ class ContextProvider : ContentProvider() {
     }
 
     companion object {
-        private val TAG = ContextProvider::class.java.simpleName
+        private val TAG = LibLocatorContextProvider::class.java.simpleName
     }
 }
