@@ -1,63 +1,37 @@
 package de.p72b.locator.location
 
-import android.content.BroadcastReceiver
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import de.p72b.locator.preferences.LocatorPreferences
 
+@SuppressLint("Registered")
 open class LocationAwareAppCompatActivity : AppCompatActivity() {
-    protected lateinit var locationManager: LocationManager
-    private lateinit var settingsClientManager: SettingsClientManager
-    private val locationSwitchStateReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (android.location.LocationManager.PROVIDERS_CHANGED_ACTION != intent.action) {
-                return
-            }
-
-            locationManager.deviceLocationSettingFulfilled(object : ISettingsClientResultListener {
-                override fun onSuccess() {
-                    locationManager.onProviderStateChanged(true)
-                }
-
-                override fun onFailure(code: Int, message: String) {
-                    locationManager.onProviderStateChanged(false)
-                }
-            })
-        }
-    }
+    private var activityImplementation = LocationAwareActivityImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        settingsClientManager = SettingsClientManager(this)
-        locationManager = LocationManager(this, settingsClientManager)
+        activityImplementation.onCreate(this, savedInstanceState)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
-                                             permissions: Array<String>,
-                                             grantResults: IntArray) {
-        for (permission in permissions) {
-            LocatorPreferences.writeToPreferences(permission, true)
-        }
-        locationManager.notifyPermissionRequestResults(permissions, grantResults)
+                                            permissions: Array<String>,
+                                            grantResults: IntArray) {
+        activityImplementation.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == SettingsClientManager.REQUEST_CODE_SETTINGS) {
-            settingsClientManager.onActivityResult(resultCode)
-        }
+        activityImplementation.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onStart() {
         super.onStart()
-        registerReceiver(locationSwitchStateReceiver, IntentFilter(android.location.LocationManager.PROVIDERS_CHANGED_ACTION))
+        activityImplementation.onStart(this)
     }
 
     override fun onStop() {
-        unregisterReceiver(locationSwitchStateReceiver)
+        activityImplementation.onStop(this)
         super.onStop()
     }
 }
