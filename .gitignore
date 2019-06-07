@@ -9,7 +9,6 @@
 **/.idea/**/*
 !.idea/codeStyles/**/*
 .idea
-gradlew
 gradlew.bat
 
 .DS_Store
