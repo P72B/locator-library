@@ -56,9 +56,14 @@ class LocationManager internal constructor(
     }
 
     @JvmOverloads
+    fun isLocationAvailable(listener: ILastLocationListener) {
+        getLastLocation(listener, false, false, false)
+    }
+
+    @JvmOverloads
     fun getLastLocation(listener: ILastLocationListener, shouldRequestLocationPermission: Boolean = true,
-                        shouldRequestSettingsChange: Boolean = true) {
-        fusedLocationSource.getLastLocation(listener, shouldRequestLocationPermission, shouldRequestSettingsChange)
+                        shouldRequestSettingsChange: Boolean = true, hasInterestInLocationResult: Boolean = true) {
+        fusedLocationSource.getLastLocation(listener, shouldRequestLocationPermission, shouldRequestSettingsChange, hasInterestInLocationResult)
     }
 
     fun subscribeToLocationChanges(listener: ILocationUpdatesListener) {
@@ -142,7 +147,7 @@ class LocationManager internal constructor(
 
     fun onProviderStateChanged(isLocationProviderAvailable: Boolean) {
         if (!isLocationProviderAvailable) {
-            onLocationChangedError(LocationManager.ERROR_PROVIDERS_DISABLED, "Location provider set to disabled.")
+            onLocationChangedError(ERROR_PROVIDERS_DISABLED, "Location provider set to disabled.")
         } else {
             fusedLocationSource.getLastLocation(object : ILastLocationListener {
                 override fun onSuccess(location: Location?) {

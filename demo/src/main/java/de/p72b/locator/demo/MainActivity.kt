@@ -44,6 +44,7 @@ class MainActivity : LocationAwareAppCompatActivity(), View.OnClickListener {
     }
 
     private fun initViews() {
+        findViewById<Button>(R.id.vButtonStatus).setOnClickListener(this)
         findViewById<Button>(R.id.vButtonLoud).setOnClickListener(this)
         findViewById<Button>(R.id.vButtonSilent).setOnClickListener(this)
         findViewById<Button>(R.id.vButtonLocationRequestDefault).setOnClickListener(this)

@@ -33,9 +33,9 @@ internal class GooglePlayServicesLocationSource(
     }
 
     fun getLastLocation(listener: ILastLocationListener, shouldRequestLocationPermission: Boolean,
-                        shouldRequestSettingsChange: Boolean) {
+                        shouldRequestSettingsChange: Boolean, hasInterestInLocationResult: Boolean = true) {
         if (permissionManager.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-            checkSettings(listener, shouldRequestSettingsChange)
+            checkSettings(listener, shouldRequestSettingsChange, hasInterestInLocationResult)
             return
         }
 
@@ -43,7 +43,7 @@ internal class GooglePlayServicesLocationSource(
             when (permissionManager.getPermissionStatus(Manifest.permission.ACCESS_FINE_LOCATION)) {
                 PermissionChecker.PERMISSION_DENIED -> listener.onError(LocationManager.ERROR_MISSING_PERMISSION, "Location permission missing")
                 PermissionChecker.PERMISSION_DENIED_APP_OP -> listener.onError(LocationManager.ERROR_MISSING_PERMISSION_DO_NOT_ASK_AGAIN, "Location permission missing, never ask me again")
-                PermissionChecker.PERMISSION_GRANTED -> checkSettings(listener, shouldRequestSettingsChange)
+                PermissionChecker.PERMISSION_GRANTED -> checkSettings(listener, shouldRequestSettingsChange, hasInterestInLocationResult)
             }
             return
         }
@@ -58,16 +58,20 @@ internal class GooglePlayServicesLocationSource(
             }
 
             override fun onGranted() {
-                checkSettings(listener, shouldRequestSettingsChange)
+                checkSettings(listener, shouldRequestSettingsChange, hasInterestInLocationResult)
             }
         })
     }
 
-    private fun checkSettings(listener: ILastLocationListener, shouldRequestSettingsChange: Boolean) {
+    private fun checkSettings(listener: ILastLocationListener, shouldRequestSettingsChange: Boolean, hasInterestInLocationResult: Boolean) {
         settingsClientManager.checkIfDeviceLocationSettingFulfillRequestRequirements(shouldRequestSettingsChange,
             locationRequest, object : ISettingsClientResultListener {
                 override fun onSuccess() {
-                    getLastFusedLocation(listener)
+                    if (hasInterestInLocationResult) {
+                        getLastFusedLocation(listener)
+                    } else {
+                        listener.onSuccess(null)
+                    }
                 }
 
                 override fun onFailure(code: Int, message: String) {

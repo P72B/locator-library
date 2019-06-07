@@ -38,6 +38,7 @@ class MainPresenter(
 
     fun onClick(view: View?) {
         when (view?.id) {
+            R.id.vButtonStatus -> statusPressed()
             R.id.vButtonLoud -> locateMePressed()
             R.id.vButtonSilent -> locateMePressed(false, false)
             R.id.vButtonLocationUpdates -> locationUpdatesPressed()
@@ -65,6 +66,18 @@ class MainPresenter(
         request.fastestInterval = fastestInterval
         request.interval = interval
         locationManager.setLocationRequest(request)
+    }
+
+    private fun statusPressed() {
+        locationManager.isLocationAvailable(object : ILastLocationListener {
+            override fun onSuccess(location: Location?) {
+                mainActivity.showSnackbar("Location could be fetched")
+            }
+
+            override fun onError(code: Int, message: String?) {
+                mainActivity.showSnackbar("($code) $message ")
+            }
+        })
     }
 
     private fun locateMePressed(shouldRequestPermission: Boolean = true, shouldRequestSettingsChange: Boolean = true) {

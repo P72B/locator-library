@@ -1,122 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:id="@+id/vMainRoot"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity">
-
-    <TextView
-            android:hint="Last known location:"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"/>
-
-    <TextView
-            android:hint="lat / lng"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+    <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/vTextViewLocation"
-            android:gravity="center"
-            android:layout_marginTop="6dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"/>
+            android:id="@+id/vMainRoot"
+            android:layout_height="match_parent"
+            tools:context=".MainActivity">
 
-    <ImageView
-            android:id="@+id/vLocationIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="6dp"
-            android:visibility="invisible"
-            tools:visibility="visible"
-            android:src="@drawable/ic_settings_input_antenna_black_24dp"/>
-
-    <TextView
-            android:hint="updated at"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/vTextViewTstamp"
-            android:gravity="center_horizontal"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="8dp"/>
-
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/vTextViewPreviousUpdate"
-            android:gravity="center_horizontal"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="8dp"/>
-
-    <TextView
-            android:hint="Create single location request:"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"/>
-
-    <Button
-            android:text="Loud"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/vButtonLoud"
-            android:layout_marginStart="8dp"/>
-
-    <Button
-            android:text="Silent"
-            android:layout_height="wrap_content"
-            android:id="@+id/vButtonSilent"
-            android:layout_width="wrap_content"
-            android:layout_marginStart="8dp"/>
-
-    <TextView
-            android:hint="Listen to location change updates:"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"/>
-
-    <Button
-            android:text="updates"
-            android:layout_height="wrap_content"
-            android:id="@+id/vButtonLocationUpdates"
-            android:layout_width="wrap_content"
-            android:layout_marginStart="8dp"/>
-
-    <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkedButton="@+id/vButtonLocationRequestDefault">
-
-        <RadioButton
-                android:text="Default"
+        <TextView
+                android:hint="Last known location:"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/vButtonLocationRequestDefault"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"/>
+
+        <TextView
+                android:hint="lat / lng"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/vTextViewLocation"
+                android:gravity="center"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
+
+        <ImageView
+                android:id="@+id/vLocationIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="6dp"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:src="@drawable/ic_settings_input_antenna_black_24dp"/>
+
+        <TextView
+                android:hint="updated at"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/vTextViewTstamp"
+                android:gravity="center_horizontal"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="8dp"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/vTextViewPreviousUpdate"
+                android:gravity="center_horizontal"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="8dp"/>
+
+        <TextView
+                android:hint="Create single location request:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"/>
+
+        <Button
+                android:text="Stauts"
+                android:layout_height="wrap_content"
+                android:id="@+id/vButtonStatus"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="8dp"/>
 
-        <RadioButton
-                android:text="High"
+        <Button
+                android:text="Loud"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/vButtonLocationRequestHigh"
+                android:id="@+id/vButtonLoud"
+                android:layout_marginStart="8dp"/>
+
+        <Button
+                android:text="Silent"
+                android:layout_height="wrap_content"
+                android:id="@+id/vButtonSilent"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="8dp"/>
 
-        <RadioButton
-                android:text="Low"
+        <TextView
+                android:hint="Listen to location change updates:"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/vButtonLocationRequestLow"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"/>
+
+        <Button
+                android:text="updates"
+                android:layout_height="wrap_content"
+                android:id="@+id/vButtonLocationUpdates"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="8dp"/>
-    </RadioGroup>
 
-</LinearLayout>
+        <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:checkedButton="@+id/vButtonLocationRequestDefault">
+
+            <RadioButton
+                    android:text="Default"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vButtonLocationRequestDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="8dp"/>
+
+            <RadioButton
+                    android:text="High"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vButtonLocationRequestHigh"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="8dp"/>
+
+            <RadioButton
+                    android:text="Low"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vButtonLocationRequestLow"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="8dp"/>
+        </RadioGroup>
+    </LinearLayout>
+</ScrollView>
