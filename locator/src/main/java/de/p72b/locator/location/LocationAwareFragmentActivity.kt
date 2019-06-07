@@ -9,6 +9,10 @@ import android.support.v4.app.FragmentActivity
 open class LocationAwareFragmentActivity : FragmentActivity() {
     private var activityImplementation = LocationAwareActivityImpl()
 
+    val locationManager: LocationManager by lazy {
+        activityImplementation.locationManager
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityImplementation.onCreate(this, savedInstanceState)

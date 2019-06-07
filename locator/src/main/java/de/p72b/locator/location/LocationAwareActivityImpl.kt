@@ -10,7 +10,7 @@ import de.p72b.locator.preferences.LocatorPreferences
 
 @Suppress("UNUSED_PARAMETER")
 internal class LocationAwareActivityImpl {
-    private lateinit var locationManager: LocationManager
+    lateinit var locationManager: LocationManager
     private lateinit var settingsClientManager: SettingsClientManager
 
     private val locationSwitchStateReceiver = object : BroadcastReceiver() {

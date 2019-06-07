@@ -9,6 +9,10 @@ import android.support.v7.app.AppCompatActivity
 open class LocationAwareAppCompatActivity : AppCompatActivity() {
     private var activityImplementation = LocationAwareActivityImpl()
 
+    val locationManager: LocationManager by lazy {
+        activityImplementation.locationManager
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityImplementation.onCreate(this, savedInstanceState)
