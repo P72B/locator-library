@@ -9,7 +9,6 @@
 **/.idea/**/*
 !.idea/codeStyles/**/*
 .idea
-/gradle
 gradlew
 gradlew.bat
 
