@@ -91,6 +91,10 @@ class LocationManager internal constructor(
         return permissionManager.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
+    fun getLocationPermissionState(): Int {
+        return permissionManager.getPermissionStatus(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
     fun checkLocationPermission(listener: IPermissionListener) {
         if (permissionManager.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
             listener.onGranted()
