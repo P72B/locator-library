@@ -2,9 +2,9 @@ package de.p72b.locator.location
 
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.PermissionChecker
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
 
 import de.p72b.locator.preferences.LocatorPreferences
 import java.util.concurrent.CopyOnWriteArrayList

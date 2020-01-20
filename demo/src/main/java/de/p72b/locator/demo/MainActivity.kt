@@ -2,12 +2,12 @@ package de.p72b.locator.demo
 
 import android.location.Location
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
+import com.google.android.material.snackbar.Snackbar
 import de.p72b.locator.location.LocationAwareAppCompatActivity
 import java.util.*
 import java.text.SimpleDateFormat

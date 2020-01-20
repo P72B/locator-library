@@ -3,7 +3,7 @@ package de.p72b.locator.location
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.support.v4.content.PermissionChecker
+import androidx.core.content.PermissionChecker
 import com.google.android.gms.location.*
 
 internal class GooglePlayServicesLocationSource(
