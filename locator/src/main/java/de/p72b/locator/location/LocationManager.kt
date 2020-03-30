@@ -9,7 +9,7 @@ import com.google.android.gms.location.LocationRequest
 
 import java.util.concurrent.CopyOnWriteArrayList
 
-class LocationManager internal constructor(
+open class LocationManager(
     activity: Activity,
     private val settingsClientManager: SettingsClientManager
 ) : ILocationUpdatesListener {
@@ -61,9 +61,16 @@ class LocationManager internal constructor(
     }
 
     @JvmOverloads
-    fun getLastLocation(listener: ILastLocationListener, shouldRequestLocationPermission: Boolean = true,
-                        shouldRequestSettingsChange: Boolean = true, hasInterestInLocationResult: Boolean = true) {
-        fusedLocationSource.getLastLocation(listener, shouldRequestLocationPermission, shouldRequestSettingsChange, hasInterestInLocationResult)
+    fun getLastLocation(
+        listener: ILastLocationListener, shouldRequestLocationPermission: Boolean = true,
+        shouldRequestSettingsChange: Boolean = true, hasInterestInLocationResult: Boolean = true
+    ) {
+        fusedLocationSource.getLastLocation(
+            listener,
+            shouldRequestLocationPermission,
+            shouldRequestSettingsChange,
+            hasInterestInLocationResult
+        )
     }
 
     fun subscribeToLocationChanges(listener: ILocationUpdatesListener) {
@@ -101,7 +108,10 @@ class LocationManager internal constructor(
             return
         }
         permissionRequestSubscribers.add(listener)
-        permissionManager.hasPermissionIfNotRequest(Manifest.permission.ACCESS_FINE_LOCATION, listener)
+        permissionManager.hasPermissionIfNotRequest(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            listener
+        )
     }
 
     private fun notifyPermissionListener(isGranted: Boolean) {
@@ -119,7 +129,10 @@ class LocationManager internal constructor(
         permissionRequestSubscribers.clear()
     }
 
-    internal fun notifyPermissionRequestResults(permissions: Array<String>, grantResults: IntArray) {
+    internal fun notifyPermissionRequestResults(
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         for ((index, permission) in permissions.withIndex()) {
             when (permission) {
                 Manifest.permission_group.LOCATION,
@@ -138,8 +151,10 @@ class LocationManager internal constructor(
     }
 
     @JvmOverloads
-    fun deviceLocationSettingFulfilled(listener: ISettingsClientResultListener,
-                                       shouldRequestSettingsChange: Boolean = false) {
+    fun deviceLocationSettingFulfilled(
+        listener: ISettingsClientResultListener,
+        shouldRequestSettingsChange: Boolean = false
+    ) {
         val locationRequest = LocationRequest()
         locationRequest.interval = 10000
         locationRequest.fastestInterval = 5000
