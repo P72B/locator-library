@@ -21,11 +21,12 @@ open class LocationAwareFragmentActivity : FragmentActivity() {
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>,
                                             grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         activityImplementation.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         activityImplementation.onActivityResult(requestCode, resultCode, data)
     }
 

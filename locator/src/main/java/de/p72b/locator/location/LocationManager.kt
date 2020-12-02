@@ -137,6 +137,7 @@ open class LocationManager(
             when (permission) {
                 Manifest.permission_group.LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION -> {
                     val grantResult = grantResults[index]
                     if (PackageManager.PERMISSION_GRANTED == grantResult) {

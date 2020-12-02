@@ -55,7 +55,14 @@ class PermissionManager(private val activity: Activity) {
 
         return if (ActivityCompat.shouldShowRequestPermissionRationale(activity, manifestPermissionName)) {
             PermissionChecker.PERMISSION_DENIED
-        } else PermissionChecker.PERMISSION_DENIED_APP_OP
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                // https://developer.android.com/about/versions/11/privacy/permissions e.g. the user's action implies "don't ask again."
+                PermissionChecker.PERMISSION_DENIED
+            } else{
+                PermissionChecker.PERMISSION_DENIED_APP_OP
+            }
+        }
     }
 
     private fun requestPermission(permission: String, permissionState: Int,
