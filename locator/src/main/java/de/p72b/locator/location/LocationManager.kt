@@ -9,7 +9,7 @@ import com.google.android.gms.location.LocationRequest
 
 import java.util.concurrent.CopyOnWriteArrayList
 
-open class LocationManager(
+class LocationManager(
     activity: Activity,
     private val settingsClientManager: SettingsClientManager
 ) : ILocationUpdatesListener {
@@ -25,33 +25,23 @@ open class LocationManager(
         const val ERROR_PROVIDERS_DISABLED = 7
     }
 
-    private val fusedLocationSource: GooglePlayServicesLocationSource
     private val subscribers = CopyOnWriteArrayList<ILocationUpdatesListener>()
     private val permissionRequestSubscribers = CopyOnWriteArrayList<IPermissionListener>()
     private val permissionManager: PermissionManager = PermissionManager(activity)
-
-    init {
-        fusedLocationSource = GooglePlayServicesLocationSource(
-            activity, permissionManager,
-            settingsClientManager, this
-        )
-    }
+    private val fusedLocationSource = GooglePlayServicesLocationSource(
+        activity, permissionManager,
+        settingsClientManager, this
+    )
 
     override fun onLocationChanged(location: Location) {
-        if (subscribers.isEmpty()) {
-            return
-        }
-        for (listener in subscribers) {
-            listener.onLocationChanged(location)
+        subscribers.forEach {
+            it.onLocationChanged(location)
         }
     }
 
     override fun onLocationChangedError(code: Int, message: String?) {
-        if (subscribers.isEmpty()) {
-            return
-        }
-        for (listener in subscribers) {
-            listener.onLocationChangedError(code, message)
+        subscribers.forEach {
+            it.onLocationChangedError(code, message)
         }
     }
 
@@ -156,13 +146,15 @@ open class LocationManager(
         listener: ISettingsClientResultListener,
         shouldRequestSettingsChange: Boolean = false
     ) {
-        val locationRequest = LocationRequest()
-        locationRequest.interval = 10000
-        locationRequest.fastestInterval = 5000
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        settingsClientManager.checkIfDeviceLocationSettingFulfillRequestRequirements(
-            shouldRequestSettingsChange, locationRequest, listener
-        )
+        LocationRequest.create().apply {
+            interval = 10_000
+            fastestInterval = 5_000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }.let {
+            settingsClientManager.checkIfDeviceLocationSettingFulfillRequestRequirements(
+                shouldRequestSettingsChange, it, listener
+            )
+        }
     }
 
     fun onProviderStateChanged(isLocationProviderAvailable: Boolean) {
@@ -171,9 +163,8 @@ open class LocationManager(
         } else {
             fusedLocationSource.getLastLocation(object : ILastLocationListener {
                 override fun onSuccess(location: Location?) {
-                    if (location != null) {
-                        onLocationChanged(location)
-                    }
+                    if (location == null) return
+                    onLocationChanged(location)
                 }
 
                 override fun onError(code: Int, message: String?) {

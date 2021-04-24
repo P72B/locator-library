@@ -42,9 +42,21 @@ class MainPresenter(
             R.id.vButtonLoud -> locateMePressed()
             R.id.vButtonSilent -> locateMePressed(false, false)
             R.id.vButtonLocationUpdates -> locationUpdatesPressed()
-            R.id.vButtonLocationRequestDefault -> setRequestSettings(LocationRequest.PRIORITY_HIGH_ACCURACY, 5000, 10000)
-            R.id.vButtonLocationRequestHigh -> setRequestSettings(LocationRequest.PRIORITY_HIGH_ACCURACY, 4000, 8000)
-            R.id.vButtonLocationRequestLow -> setRequestSettings(LocationRequest.PRIORITY_LOW_POWER, 20000, 40000)
+            R.id.vButtonLocationRequestDefault -> setRequestSettings(
+                LocationRequest.PRIORITY_HIGH_ACCURACY,
+                5000,
+                10000
+            )
+            R.id.vButtonLocationRequestHigh -> setRequestSettings(
+                LocationRequest.PRIORITY_HIGH_ACCURACY,
+                4000,
+                8000
+            )
+            R.id.vButtonLocationRequestLow -> setRequestSettings(
+                LocationRequest.PRIORITY_LOW_POWER,
+                20000,
+                40000
+            )
         }
     }
 
@@ -61,11 +73,11 @@ class MainPresenter(
     }
 
     private fun setRequestSettings(priority: Int, fastestInterval: Long, interval: Long) {
-        val request = LocationRequest()
-        request.priority = priority
-        request.fastestInterval = fastestInterval
-        request.interval = interval
-        locationManager.setLocationRequest(request)
+        locationManager.setLocationRequest(LocationRequest.create().apply {
+            this.priority = priority
+            this.fastestInterval = fastestInterval
+            this.interval = interval
+        })
     }
 
     private fun statusPressed() {
@@ -80,7 +92,10 @@ class MainPresenter(
         })
     }
 
-    private fun locateMePressed(shouldRequestPermission: Boolean = true, shouldRequestSettingsChange: Boolean = true) {
+    private fun locateMePressed(
+        shouldRequestPermission: Boolean = true,
+        shouldRequestSettingsChange: Boolean = true
+    ) {
         locationManager.getLastLocation(object : ILastLocationListener {
             override fun onSuccess(location: Location?) {
                 if (location != null) {
